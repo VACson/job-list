@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import JobBlock from './src/components/JobBlock';
+import Link from 'next/link';
 
 // export { getStaticProps } from './'
 
@@ -65,11 +66,10 @@ export default function Home({ joblist }: any) {
     <div className="jobListPageWrapper">
       {joblist.map((job: any, index: number) => (
         <div className="jobListBlock" key={job.id}>
-          <img src={job.pictures[0]} alt="" />
-          <div className="">{job.title}</div>
-          <div className="">{job.name}</div>
-          <div className="">{job.address}</div>
-          <div className="">{job.employment_type}</div>
+          <img className="jobListBlock__image" src={job.pictures[0]} alt="" />
+          <Link href={`/jobs/${job.id}`} className="jobListBlock__information">
+            <div className="jobListBlock__information__title">{job.title}</div>
+          </Link>
         </div>
       ))}
     </div>
