@@ -11,28 +11,13 @@ import ShareIcon from '../src/components/Icons/ShareIcon';
 import GoogleMapBlock from '../src/components/GoogleMap/GoogleMapBlock';
 import JobDetailDescription from '../src/components/Description/JobDetailDescription';
 
-export const getJobs = async () => {
-  // get request to job details
-  return axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/?id=635ee6d304601d61a71951f6`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
-    })
-    .then((res) => res.data);
-};
-
-export default function Job() {
+export default function Job({joblist}: any) {
   const router = useRouter(); //useRouter to get id of job
-  const { data, isLoading, error } = useQuery(['job'], getJobs);
-  if (isLoading) return 'isLoading'
-  const currentJob = data.filter(
+   const currentJob = joblist.filter(
     //get current job object in array
     (job: { id: string | string[] | undefined }) => job.id === router.query.id,
-  )[0]
-  const timeDistance = currentJob.updatedAt // change time string to time to now
+  )[0];
+  const timeDistance =  currentJob.updatedAt // change time string to time to now
     ? `Updated ${formatDistanceToNow(new Date(currentJob.updatedAt))} ago`
     : `Posted ${formatDistanceToNow(new Date(currentJob.createdAt))} ago`
   return (
@@ -161,3 +146,20 @@ export default function Job() {
     </div>
   )
 }
+export async function getServerSideProps({params}:any) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+    },
+  });
+  const joblist = await res.json();
+
+  return {
+    props: {
+      joblist,
+    },
+  };
+}
+
