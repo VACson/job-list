@@ -48,6 +48,7 @@ export default function Home({ joblist }: any) {
         <title>Job list app</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col items-center gap-2 p-2 bg-slate-200 desktop:pt-8">
         {currentJobs.map((job: Job) => {
