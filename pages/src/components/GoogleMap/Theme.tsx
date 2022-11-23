@@ -1,4 +1,4 @@
-export const defaultTheme = [
+export default function defaultTheme() { return [
   {
     featureType: 'all',
     elementType: 'geometry',
@@ -134,4 +134,4 @@ export const defaultTheme = [
       },
     ],
   },
-];
+]}

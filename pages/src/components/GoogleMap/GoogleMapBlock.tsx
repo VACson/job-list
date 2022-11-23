@@ -1,7 +1,6 @@
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import React, { useCallback, useRef } from 'react';
-import { defaultTheme } from './Theme';
-import Icon from '../../assets/Shape.png';
+import defaultTheme from './Theme';
 
 const defaultOptions = {
   panControl: false,
@@ -15,7 +14,7 @@ const defaultOptions = {
   scrollwheel: false,
   disableDoubleClickzoom: false,
   fullscreenControl: false,
-  styles: defaultTheme,
+  styles: defaultTheme(),
 };
 
 export default function GoogleMapBlock({ lat, lng }: any) {
