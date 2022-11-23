@@ -15,14 +15,14 @@ export default function JobDetailDescription({ description }: any) {
                 {str}
               </ul>
             ) : (
-              <p className="" key={index}>
+              <p className="text-[18px]" key={index}>
                 {str}
               </p>
             ),
           )
         : part.split('. ').map((str, index) => (
             <li
-              className="before:content-['\25A0'] before:-ml-3 before:mr-2 before:absolute before:text-[9px] list-none"
+              className="before:content-['\25A0'] before:-ml-3 before:mr-2 before:absolute before:text-[9px] before:text-gray-500 list-none"
               key={index}>
               {str}
             </li>

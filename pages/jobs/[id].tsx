@@ -3,15 +3,15 @@ import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import PinIcon from '../src/assets/PinIcon';
-import FavoritesIcon from '../src/assets/FavoritesIcon';
-import FavoritesIconMobile from '../src/assets/FavoritesIconMobile';
-import ShareIcon from '../src/assets/ShareIcon';
+import PinIcon from '../src/components/Icons/PinIcon';
+import FavoritesIcon from '../src/components/Icons/FavoritesIcon';
+import FavoritesIconMobile from '../src/components/Icons/FavoritesIconMobile';
+import ShareIcon from '../src/components/Icons/ShareIcon';
 
 import GoogleMapBlock from '../src/components/GoogleMap/GoogleMapBlock';
 import JobDetailDescription from '../src/components/Description/JobDetailDescription';
 
-export const getTodos = async () => {
+export const getJobs = async () => {
   // get request to job details
   return axios
     .get(`${process.env.NEXT_PUBLIC_API_URL}/?id=635ee6d304601d61a71951f6`, {
@@ -25,68 +25,76 @@ export const getTodos = async () => {
 };
 
 export default function Job() {
-  const router = useRouter();
-  const { data, isLoading, error } = useQuery(['job'], getTodos);
-  if (isLoading) return 'isLoading';
+  const router = useRouter(); //useRouter to get id of job
+  const { data, isLoading, error } = useQuery(['job'], getJobs);
+  if (isLoading) return 'isLoading'
   const currentJob = data.filter(
+    //get current job object in array
     (job: { id: string | string[] | undefined }) => job.id === router.query.id,
-  )[0];
+  )[0]
   const timeDistance = currentJob.updatedAt // change time string to time to now
     ? `Updated ${formatDistanceToNow(new Date(currentJob.updatedAt))} ago`
-    : `Posted ${formatDistanceToNow(new Date(currentJob.createdAt))} ago`;
-  console.log(currentJob);
+    : `Posted ${formatDistanceToNow(new Date(currentJob.createdAt))} ago`
   return (
-    <div className="flex flex-col justify-center w-full h-full gap-32 p-4 pt-8 pb-20 xl:flex-row">
-      <div className="w-full text-[#3A4562] xl:w-2/5">
-        <div className="flex flex-col flex-wrap justify-between pb-2 text-3xl font-bold tracking-wider xl:flex-row">
+    <div className="flex flex-col justify-center w-full h-full gap-32 p-4 pt-8 pb-20 desktop:flex-row bg-[#f5f5f5]">
+      <div className="w-full text-[#3A4562] desktop:w-2/5">
+        <div className="flex flex-col flex-wrap justify-between pb-2 text-3xl font-bold tracking-wider desktop:flex-row">
           Job Details
-          <div className="flex flex-row order-1 gap-4 font-normal xl:text-lg xl:order-1-none">
-            <div className="flex flex-row">
-              <div className="hidden h-5 mr-2 xl:block text-[#70778B] hover:text-yellow-400 ">
-                <FavoritesIcon />
+          <div className="flex flex-row order-1 gap-4 font-normal desktop:text-lg desktop:order-1-none">
+            <div className="flex flex-row items-center">
+              <div className="hidden mr-2 desktop:block text-[#70778B] hover:scale-125">
+                <FavoritesIcon borderColorDefault="#70778B" />
               </div>
-              <div className="mr-2 xl:hidden text-[#70778B] hover:text-yellow-400">
-                <FavoritesIconMobile />
+              <div className="mr-2 desktop:hidden text-[#70778B] hover:scale-125">
+                <FavoritesIconMobile borderColorDefault="#70778B" />
               </div>
               Save to my list
             </div>
-            <div className="flex flex-row">
-              <div className="mr-2 text-[#70778B] hover:text-blue-400">
+            <div className="flex flex-row items-center">
+              <div className="mr-2 text-[#70778B] hover:text-blue-400 hover:scale-125">
                 <ShareIcon />
               </div>
               Share
             </div>
           </div>
-          <hr className="w-full mt-[9px] xl:mb-0 mb-6 xl:order-1" />
+          <hr className="w-full mt-[9px] desktop:mb-0 mb-6 desktop:order-1" />
         </div>
-        <button className="hidden w-32 mt-10 mb-8 text-xs text-white rounded-lg bg-button-bg xl:block h-14">
+        <button className="hidden mt-10 mb-8 text-xs text-white rounded-lg w-buttonWidth bg-button-bg desktop:block h-buttonHeight hover:opacity-75">
           APPLY NOW
         </button>
         <div className="flex flex-row flex-wrap justify-between w-full">
-          <div className="w-11/12 text-2xl font-bold xl:w-2/3">{currentJob.title}</div>
-          <div className="flex flex-col order-1 w-2/4 text-xl font-bold xl:w-1/3 text-end xl:order-none flex-nowrap">
-            <div className="order-1 xl:order-none">
-              &#8364; {currentJob.salary.replace(/k/g, ' 000').replace(/-/g, '—')}
+          <div className="w-11/12 text-2xl font-bold desktop:w-2/3">{currentJob.title}</div>
+          <div className="flex flex-col order-1 w-2/4 text-xl font-bold desktop:w-1/3 desktop:text-start text-end desktop:order-none flex-nowrap">
+            <div className="order-1 desktop:order-none">
+              &#8364; {currentJob.salary.replace(/k/g, ' 000').replace(/-/g, '—')}{' '}
+              {/* turn k symbol into 000 to get normal view of salary */}
             </div>
-            <div className="text-xs">Brutto, per year</div>
+            <div className="text-lg font-normal">Brutto, per year</div>
           </div>
           <div className="w-2/5 text-lg text-grey-text">{timeDistance}</div>
         </div>
         <div className="text-lg">
           <JobDetailDescription description={currentJob.description} />
         </div>
-        <div className="flex justify-center w-full mt-10 mb-20 xl:justify-start">
-          <button className="w-32 text-xs text-white rounded-lg bg-button-bg h-14">
+        <div className="flex justify-center w-full mt-10 mb-20 desktop:justify-start">
+          <button className="text-xs text-white rounded-lg w-buttonWidth bg-button-bg h-buttonHeight hover:opacity-75">
             APPLY NOW
           </button>
         </div>
         <div className="flex flex-col">
-          <div className="mt-20 text-3xl font-bold xl:order-1">
-            Attached images <hr />
-            <div className="flex flex-row w-full gap-8 overflow-auto">
-              {currentJob.pictures.map((pictureUrl: string, index: number) => (
-                <img className="object-cover mt-5 w-52 h-28" src={pictureUrl} alt="" key={index} />
-              ))}
+          <div className="mt-20 text-3xl font-bold desktop:order-1">
+            Attached images <hr className="mt-[9px]" />
+            <div className="flex flex-row w-full gap-8 overflow-x-auto flex-nowrap">
+              {currentJob.pictures.map(
+                (
+                  pictureUrl: string,
+                  index: number, //map images
+                ) => (
+                  <div className=" mt-5 min-w-[200px] h-[116px]" key={index}>
+                    <img className="object-cover w-full h-full" src={pictureUrl} alt="" />
+                  </div>
+                ),
+              )}
             </div>
           </div>
           <div className="mt-16 text-3xl font-bold">
@@ -95,51 +103,61 @@ export default function Job() {
           <div className="w-full mt-4 text-lg">
             Employment type
             <div className="flex flex-row gap-2 font-bold flex-nowrap">
-              {currentJob.employment_type.map((type: string | undefined) => (
-                <div
-                  className="w-56 h-12 pt-2 mt-2.5 border-slate-400 border-[1px] text-center rounded-lg bg-slate-200"
-                  key={type}>
-                  {type}
-                </div>
-              ))}
+              {currentJob.employment_type.map(
+                (
+                  type: string | undefined, // map empoyment types
+                ) => (
+                  <div
+                    className="w-56 h-12 pt-2 mt-2.5 border-slate-400 border-[1px] pr-4 desktop:pr-0 text-end desktop:text-center text-[#55699E] rounded-lg bg-slate-200"
+                    key={type}>
+                    {type}
+                  </div>
+                ),
+              )}
             </div>
           </div>
           <div className="text-lg ">
             Benefits
             <div className="flex flex-row gap-2 font-bold flex-nowrap">
-              {currentJob.benefits.map((benefit: string, index: number) => (
-                <div
-                  className="w-56 h-12 mt-2.5 pt-2 text-center rounded-lg border-amber-400 border-[1px] text-amber-700 bg-amber-100"
-                  key={index}>
-                  {benefit}
-                </div>
-              ))}
+              {currentJob.benefits.map(
+                (
+                  benefit: string,
+                  index: number, // map benefits
+                ) => (
+                  <div
+                    className="w-56 h-12 mt-2.5 pt-2 text-center rounded-lg border-amber-400 border-[1px] text-amber-700 bg-amber-100"
+                    key={index}>
+                    {benefit}
+                  </div>
+                ),
+              )}
             </div>
           </div>
         </div>
         <Link href={'/'}>
-          <button className="hidden h-12 mt-24 text-xs font-semibold rounded-lg xl:block xl:-ml-24 w-52 bg-slate-200">
-            &#10094; RETURN TO JOB BOARD
+          <button className="hidden h-12 mt-24 text-[12px] font-semibold rounded-lg desktop:block desktop:-ml-24 w-52 bg-slate-200">
+            <span className="text-[18px] mr-5">&#10094;</span>RETURN TO JOB BOARD
           </button>
         </Link>
       </div>
-      <div className="rounded-lg xl:w-100 h-109 pb-9">
-        <div className="mt-16 mb-2.5 text-3xl font-bold text-blue-900 xl:hidden">
+      <div className="rounded-lg desktop:w-100 h-109">
+        <div className="mt-16 mb-2.5 text-3xl font-bold text-blue-900 desktop:hidden">
           Contacts <hr />
         </div>
-        <div className="w-full p-8 pl-16 pr-16 mt-5 rounded-t-lg xl:mt-0 h-1/2 text-slate-200 bg-[#2A3047]">
-          <div className="text-xl text-slate-50">{currentJob.name}</div>
-          <span className="flex flex-row">
-            <div className="mr-2">
+        <div className="w-full z-0 relative p-8 pl-16 pr-16 outline-2 mt-5 rounded-t-lg desktop:mt-0 h-1/2 text-slate-200 bg-[#2A3047]">
+          <div className="absolute rounded-t-lg left-0 top-0 w-1/2 h-full bg-[#202336] -z-10 clip-custom-circle"></div>
+          <div className="text-xl font-bold text-slate-50">{currentJob.name}</div>
+          <span className="text-lg">
+            <div className="inline-block mr-2">
               <PinIcon />
             </div>
             {currentJob.address}
           </span>
-          <div className="">{currentJob.phone}</div>
-          <div className="">{currentJob.email}</div>
+          <div className="text-lg">{currentJob.phone}</div>
+          <div className="text-lg">{currentJob.email}</div>
         </div>
         <GoogleMapBlock lat={currentJob.location.lat} lng={currentJob.location.long} />
       </div>
     </div>
-  );
+  )
 }

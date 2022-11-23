@@ -19,12 +19,11 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: light) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: black;
-    background: #f5f5f5;
-  }
+.clip-custom-circle {
+  clip-path: circle(70% at 20% 50%);
+}
+
+body {
+  color: black;
+  background: #e6e9f2;
 }

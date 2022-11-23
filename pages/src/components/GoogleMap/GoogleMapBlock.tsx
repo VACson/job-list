@@ -40,7 +40,7 @@ export default function GoogleMapBlock({ lat, lng }: any) {
         <GoogleMap
           id="google-map"
           onLoad={onLoad}
-          onUnmount={onUnmount}
+          // onUnmount={onUnmount}
           mapContainerClassName={'rounded-b-lg w-full h-1/2'}
           center={center}
           zoom={11}
